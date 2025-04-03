@@ -11,10 +11,11 @@ def load_data(root_fichero_preguntas):
             return json.load(f)
 
 class Question_file:
-    def __init__(self, init, widget, shuffle):
+    def __init__(self, init, widget, shuffle, smode):
         self.init = init
         self.widget = widget
         self.shuffle = shuffle
+        self.smode = smode
 
         # Nombre del fichero de preguntas
         self.root_fichero_preguntas = filedialog.askopenfilename(initialdir=os.path.join(self.init.root_path), 
@@ -27,10 +28,12 @@ class Question_file:
         self.data = load_data(self.root_fichero_preguntas)      # Carga el fichero de preguntas
         self.num_preguntas = len(self.data['emp_details'])
         self.num_opciones_preguntas = len(self.data['emp_details'][0]['options'][0])      # Número de preguntas totales en el test
+
         self.opciones_preguntas = []
         alfabeto = ["a", "b", "c", "d", "e", "f", "g"]
         for i in range(0,self.num_opciones_preguntas):
             self.opciones_preguntas.append(alfabeto[i])
+
         self.nombre_test_anterior = ""                          # Contiene el nombre del fichero del test anterior, sirviendo también como flag para saber si se ha realizado un test previo
         
         self.preguntas_realizadas = []
@@ -40,8 +43,12 @@ class Question_file:
 
     def display_question(self):
         if len(self.preguntas_realizadas) >= self.num_preguntas:
-            self.widget.end_test()
-            return
+            if self.smode.flag_smode == False:
+                self.widget.end_test()
+                return
+            else:
+                self.smode.smode_end_test()
+                return
 
         self.current_question = choice([i for i in range(self.num_preguntas) if i not in self.preguntas_realizadas])
         pregunta = self.data['emp_details'][self.current_question]

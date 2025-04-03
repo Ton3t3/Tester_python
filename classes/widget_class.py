@@ -7,12 +7,13 @@ from random import choice
 
 
 class Widget:
-    def __init__(self, root, questionaire, qfile, shuffle, init):
+    def __init__(self, root, questionaire, qfile, shuffle, init, smode):
         self.questionaire = questionaire
         self.root = root
         self.qfile = qfile
         self.shuffle = shuffle
         self.init = init
+        self.smode = smode
 
         self.question_label = tk.Label(self.root, text="Pregunta", wraplength=400, justify="left")
         self.question_label.pack(pady=10)
@@ -29,6 +30,11 @@ class Widget:
 
         self.clean_button = tk.Button(button_frame, text="Borrar", command=self.reset_selection)
         self.clean_button.pack(side="left", padx=5)
+
+        self.previous_button = tk.Button(button_frame, text="Previous", state="disabled", command=self.smode.smode_previous_question)
+        # self.previous_button.pack(side="left", padx=5)
+        self.previous_button.pack_forget()
+        
 
         self.next_button = tk.Button(button_frame, text="Siguiente", command=self.next_question)
         self.next_button.pack(side="left", padx=5)
@@ -47,30 +53,7 @@ class Widget:
         respuesta = self.options_var.get()
         pregunta = self.qfile.data['emp_details'][self.qfile.current_question]
 
-
-        if self.shuffle.flag_shuffle == False:                  #NORMAL MODE
-            solucion_correcta = pregunta["solution"]
-        else:                                           #SUFFLE MODE
-            solucion_correcta = self.shuffle.solucion_mezclada
-
-        if respuesta == solucion_correcta:
-            self.questionaire.correcto += 1
-            self.questionaire.correcto_actual += 1
-        elif respuesta == "":
-            self.questionaire.blanco += 1
-            self.questionaire.blanco_actual += 1
-            self.questionaire.id_fallado += [self.qfile.current_question]
-            self.questionaire.contestado += [(self.qfile.current_question,"BLANCO")]
-            if self.shuffle.flag_shuffle:
-                self.shuffle.solucion_mezclada_lista += [(self.qfile.current_question, self.shuffle.solucion_mezclada)]
-        else:
-            self.questionaire.fallado += 1
-            self.questionaire.fallado_actual += 1
-            self.questionaire.id_fallado += [self.qfile.current_question]
-            self.questionaire.contestado += [(self.qfile.current_question,respuesta)]
-            if self.shuffle.flag_shuffle:
-                self.shuffle.solucion_mezclada_lista += [(self.qfile.current_question, self.shuffle.solucion_mezclada)]
-
+        self.questionaire.results_manager(respuesta, pregunta)
 
         self.qfile.preguntas_realizadas.append(self.qfile.current_question)
         self.status_label.config(text=f"Estado: {self.questionaire.correcto} correctos, {self.questionaire.fallado} fallados, {self.questionaire.blanco} en blanco")
