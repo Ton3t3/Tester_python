@@ -59,12 +59,12 @@ class Question_file:
         
 
         if not self.shuffle.flag_shuffle:
-            preguntas = self.opciones_preguntas
+            for i, key in enumerate(self.opciones_preguntas):
+                self.frame_manager.options_buttons[i].config(text=f"{key}: {opciones[key]}") if not self.smode.flag_smode else self.frame_manager.study_options_buttons[i].config(text=f"{key}: {opciones[key]}")
         else:            
             letras_preguntas_mezcladas = self.shuffle.mezclador_letras(self.opciones_preguntas, pregunta, self.opciones_preguntas)
-            preguntas = letras_preguntas_mezcladas
-
-        for i, key in enumerate(preguntas):
-            self.frame_manager.options_buttons[i].config(text=f"{key}: {opciones[key]}") if not self.smode.flag_smode else self.frame_manager.study_options_buttons[i].config(text=f"{key}: {opciones[key]}")
+            for i, key in enumerate(letras_preguntas_mezcladas):
+                self.frame_manager.options_buttons[i].config(text=f"{self.opciones_preguntas[i]}: {opciones[key]}") if not self.smode.flag_smode else self.frame_manager.study_options_buttons[i].config(text=f"{self.opciones_preguntas[i]}: {opciones[key]}")          
+       
         self.frame_manager.options_var.set("") if not self.smode.flag_smode else self.frame_manager.study_options_var.set("")
     

@@ -63,9 +63,9 @@ class FrameManager:
         prev_test_frame = tk.Frame(f1)
         prev_test_frame.pack(pady=10, anchor="center", fill="x")
         prev_button = tk.Radiobutton(prev_test_frame, text="Previous Test", command=self.prev_test.load_previous_test)
-        prev_button.pack(pady=10)
+        prev_button.pack(side="left", padx=10)
         self.prev_test_path = tk.Label(prev_test_frame, text="Select the previous test file", wraplength=400, justify="left")
-        self.prev_test_path.pack(pady=10)
+        self.prev_test_path.pack(side="left", padx=10)
         
         start_button = tk.Button(f1, text="Iniciar Test", command=self.init.start_test)
         start_button.pack(pady=10)
