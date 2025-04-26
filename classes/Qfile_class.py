@@ -11,11 +11,12 @@ def load_data(root_fichero_preguntas):
             return json.load(f)
 
 class Question_file:
-    def __init__(self, init, widget, shuffle, smode):
+    def __init__(self, init, questionaire, shuffle, smode, frame_manager):
         self.init = init
-        self.widget = widget
+        self.questionaire = questionaire
         self.shuffle = shuffle
         self.smode = smode
+        self.frame_manager = frame_manager
 
         # Nombre del fichero de preguntas
         self.root_fichero_preguntas = filedialog.askopenfilename(initialdir=os.path.join(self.init.root_path), 
@@ -44,7 +45,7 @@ class Question_file:
     def display_question(self):
         if len(self.preguntas_realizadas) >= self.num_preguntas:
             if self.smode.flag_smode == False:
-                self.widget.end_test()
+                self.questionaire.end_test()
                 return
             else:
                 self.smode.smode_end_test()
@@ -53,17 +54,17 @@ class Question_file:
         self.current_question = choice([i for i in range(self.num_preguntas) if i not in self.preguntas_realizadas])
         pregunta = self.data['emp_details'][self.current_question]
         
-        self.widget.question_label.config(text=pregunta["question"])
+        self.frame_manager.question_label.config(text=pregunta["question"]) if not self.smode.flag_smode else self.frame_manager.study_question_label.config(text=pregunta["question"])
         opciones = pregunta["options"][0]
         
 
         if not self.shuffle.flag_shuffle:
-            for i, key in enumerate(self.opciones_preguntas):
-                self.widget.options_buttons[i].config(text=f"{key}: {opciones[key]}")
-        else:
+            preguntas = self.opciones_preguntas
+        else:            
             letras_preguntas_mezcladas = self.shuffle.mezclador_letras(self.opciones_preguntas, pregunta, self.opciones_preguntas)
-            for i, key in enumerate(letras_preguntas_mezcladas):
-                self.widget.options_buttons[i].config(text=f"{key}: {opciones[key]}")
-    
-        self.widget.options_var.set("")
+            preguntas = letras_preguntas_mezcladas
+
+        for i, key in enumerate(preguntas):
+            self.frame_manager.options_buttons[i].config(text=f"{key}: {opciones[key]}") if not self.smode.flag_smode else self.frame_manager.study_options_buttons[i].config(text=f"{key}: {opciones[key]}")
+        self.frame_manager.options_var.set("") if not self.smode.flag_smode else self.frame_manager.study_options_var.set("")
     

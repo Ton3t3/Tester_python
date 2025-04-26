@@ -1,0 +1,10 @@
+FINAL DEL TEST 2025-04-26T17:24:01.324706
+
+Shuffle ON(1)/OFF(0): 0
+Total de pregunta realizadas: 0
+[]
+[0, 0, 0]
+
+
+
+Aciertos: 0		Libres: 0		Fallos: 0 	en las preguntas:

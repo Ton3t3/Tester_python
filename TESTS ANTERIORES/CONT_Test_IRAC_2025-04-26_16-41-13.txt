@@ -1,0 +1,41 @@
+FINAL DEL TEST 2025-04-26T16:42:03.969706
+
+Shuffle ON(1)/OFF(0): 0
+Total de pregunta realizadas: 16
+[41, 2, 4, 12, 44, 18, 29, 48, 60, 11, 37, 16, 9, 1, 62, 49]
+[2, 10, 4]
+
+Aciertos_TOT: 2		Libres_TOT: 10		Fallos_TOT: 4
+
+Aciertos: 1		Libres: 4		Fallos: 1 	en las preguntas:
+
+Test IRAC: Un Servidor Proxy de SIP recibe un INVITE con puerto origen 9000. Después envía una respuesta 180 ringing con puerto destino 5060. Si el cliente llamante estaba detrás de un NAT 
+	Contestado: BLANCO	Respuesta correcta: a (La respuesta no llegará al cliente)
+Test IRAC: En un escenario de tránsito RTC-VoIP-RTC, el protocolo SIP se emplea entre:
+	Contestado: BLANCO	Respuesta correcta: c (No se emplea.)
+Test IRAC: Los códecs a utilizar en una sesión de audio/vídeo en WebRTC:
+	Contestado: BLANCO	Respuesta correcta: c (Se determinan mediante negociación entre los navegadores implicados.)
+Test IRAC: ¿Qué configuración es más habitual en servicios WebRTC?
+	Contestado: c	Respuesta correcta: b (Triángulo con un servidor.)
+Test IRAC: ¿Qué protocolo permite tener canales de datos (RTCDataChannel) fiables en WebRTC?
+	Contestado: BLANCO	Respuesta correcta: b (SCTP.)
+
+
+Test IRAC: ¿Cuál de las siguientes respuestas SIP es provisional?
+	Contestado: BLANCO	Respuesta correcta: a (Ringing)
+Test IRAC: El concatenado de varios bloques de octetos de voz en cada paquete IP se usa para
+	Contestado: BLANCO	Respuesta correcta: c (Reducir la capacidad ocupada por cada flujo de voz sobre IP)
+Test IRAC: ¿Cuál de las siguientes opciones para transporte de VoIP genera una menor tasa de bit por llamada a nivel IP?
+	Contestado: BLANCO	Respuesta correcta: b (Códec G.729 (8 kbit/s) y tiempo de empaquetado de 20 ms.)
+Test IRAC: La voz empaquetada con RTP se encapsula en tramas UDP para posibilitar:
+	Contestado: BLANCO	Respuesta correcta: b (La entrega al decodificador de voz en el terminal destinatario.)
+Test IRAC: ¿Cuál de las siguientes peticiones SIP no es básica?
+	Contestado: BLANCO	Respuesta correcta: c (REFER.)
+Test IRAC: ICE se usa en WebRTC para:
+	Contestado: BLANCO	Respuesta correcta: c (Facilitar el cruce de dispositivos NAT.)
+Test IRAC: En WebRTC indique cuál de los siguientes valores no se especifica en SDP:
+	Contestado: b	Respuesta correcta: c (Claves de cifrado.)
+Test IRAC: Indique qué afirmación es correcta sobre ICE:
+	Contestado: b	Respuesta correcta: a (Aumenta el retardo de establecimiento de las sesiones.)
+Test IRAC: La voz empaquetada con RTP se encapsula sobre UDP para posibilitar:
+	Contestado: c	Respuesta correcta: b (La entrega al terminal destinatario.)

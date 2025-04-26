@@ -12,6 +12,9 @@ class Shuffle:
         self.solucion_mezclada_lista = []                       # Lista donde se guardarán los valores correctos de las preguntas erradas tras mezclar las opciones
         self.solucion_mezclada = ""                             # Variable donde se escribirá el resultado de la pregunta correcta tras mezclar las opciones (no es la misma letra del JSON)
     
+    def turn_shuffle_flag(self):
+        self.flag_shuffle = not self.flag_shuffle
+
     def mezclador_letras(self, letras_preguntas, pregunta, opciones_preguntas):
         letras_preguntas_usadas = []
         for i in range(0,len(opciones_preguntas)):

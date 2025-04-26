@@ -7,11 +7,11 @@ from random import choice
 import sys
 
 from classes.questionaire_class import Questionaire
-from classes.widget_class import Widget
 from classes.shuffle_class import Shuffle
 from classes.Qfile_class import Question_file
 from classes.previous_test_class import PreviousTest
 from classes.study_mode_class import SMode
+from classes.frame_manager_class import FrameManager
     
 class Init:
     def __init__(self, root):
@@ -20,28 +20,37 @@ class Init:
         # self.root_path = os.path.dirname(sys.executable)           #PARA .EXE!!!!
         self.root_path = os.path.dirname(os.path.abspath(__file__))       #PARA .PY!!!!!
 
+    def start_test(self):
+        if study_mode.flag_smode:
+            frame_manager.study_frame()
+            self.root.title(f"Test de Preguntas [Test: {question_file.nombre_fichero_preguntas[:-5]}] [STUDY MODE: ON]")
+        else:
+            frame_manager.test_frame()
+            self.root.title(f"Test de Preguntas [Test: {question_file.nombre_fichero_preguntas[:-5]}] [Shuffle: {"ON" if int(shuffle.flag_shuffle) == 1 else "OFF"}]")
+        question_file.display_question()
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()
 
     initializer = Init(root)
     shuffle = Shuffle()
-    question_file = Question_file(initializer, None, shuffle, None)
-    questionaire = Questionaire(question_file, shuffle)
-    study_mode = SMode(None, question_file, root)
-    widget = Widget(root, questionaire, question_file, shuffle, initializer, study_mode)
-    study_mode.widget = widget
-    question_file.widget = widget
+    question_file = Question_file(initializer, None, shuffle, None, None)
+    questionaire = Questionaire(question_file, shuffle, None, initializer, root)
+    question_file.questionaire = questionaire
+    study_mode = SMode(question_file, None, root)
+    # widget = Widget(root, questionaire, question_file, shuffle, initializer, study_mode, None)
+    # study_mode.widget = widget
     question_file.smode = study_mode
-    prev_test = PreviousTest(initializer, questionaire, shuffle, widget, question_file)
-    
+    prev_test = PreviousTest(initializer, questionaire, shuffle, question_file, None)
+    frame_manager = FrameManager(root, questionaire, question_file, shuffle, study_mode, prev_test, initializer)
+    prev_test.frame_manager = frame_manager
+    question_file.frame_manager = frame_manager
+    # widget.frame_manager = frame_manager
+    questionaire.frame_manager = frame_manager
+    study_mode.frame_manager = frame_manager
 
-    study_mode.flag_smode = bool(int(messagebox.askyesno("LMode", "¿Desea activar el modo estudio?")))
-    if study_mode.flag_smode:  
-        study_mode.study_mode_activation()
-    else:
-        prev_test.load_previous_test()
-
-    question_file.display_question()
+    frame_manager.init_frame()
 
     root.mainloop()
