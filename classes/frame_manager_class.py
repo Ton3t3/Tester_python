@@ -66,6 +66,8 @@ class FrameManager:
         prev_button.pack(side="left", padx=10)
         self.prev_test_path = tk.Label(prev_test_frame, text="Select the previous test file", wraplength=400, justify="left")
         self.prev_test_path.pack(side="left", padx=10)
+        cancel_prev_button = tk.Button(prev_test_frame, text="Cancel", command=self.prev_test.off_pflag)
+        cancel_prev_button.pack(side="left", padx=10)
         
         start_button = tk.Button(f1, text="Iniciar Test", command=self.init.start_test)
         start_button.pack(pady=10)

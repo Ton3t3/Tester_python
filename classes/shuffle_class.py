@@ -11,9 +11,11 @@ class Shuffle:
         self.flag_shuffle = False                               # Flag para saber si está activo el modo shuffle
         self.solucion_mezclada_lista = []                       # Lista donde se guardarán los valores correctos de las preguntas erradas tras mezclar las opciones
         self.solucion_mezclada = ""                             # Variable donde se escribirá el resultado de la pregunta correcta tras mezclar las opciones (no es la misma letra del JSON)
+        self.flag_shuffle_interno = False                            
     
     def turn_shuffle_flag(self):
-        self.flag_shuffle = not self.flag_shuffle
+        self.flag_shuffle_interno = not self.flag_shuffle_interno
+        self.flag_shuffle = self.flag_shuffle_interno
 
     def mezclador_letras(self, letras_preguntas, pregunta, opciones_preguntas):
         letras_preguntas_usadas = []

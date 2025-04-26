@@ -6,12 +6,13 @@ from tkinter import messagebox, filedialog
 from random import choice
 
 class Questionaire:
-    def __init__(self, qfile, shuffle, frame_manager, init, root):
+    def __init__(self, qfile, shuffle, frame_manager, init, root, previous_test):
         self.qfile = qfile
         self.shuffle = shuffle
         self.frame_manager = frame_manager
         self.init = init
         self.root = root
+        self.prev_test = previous_test
 
         #% Variables para referenciar los resultados de las preguntas de test anteriores     
         self.correcto = 0
@@ -44,7 +45,7 @@ class Questionaire:
 
     def end_test(self):
         now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        if self.qfile.nombre_test_anterior == "":
+        if not self.prev_test.flag_pmode:
             save_path = os.path.join(self.init.root_path, "TESTS ANTERIORES", f"Test_{self.qfile.nombre_fichero_preguntas[:-5]}_{now}.txt")
         else:
             save_path = os.path.join(self.init.root_path, "TESTS ANTERIORES", f"CONT_{self.qfile.nombre_test_anterior}")
@@ -58,7 +59,7 @@ class Questionaire:
             f.write(f"\n{[self.correcto, self.blanco, self.fallado]}")
 
            
-            if self.qfile.nombre_test_anterior != "":
+            if not self.prev_test.flag_pmode:
                 f.write(f"\n\nAciertos_TOT: {self.correcto}\t\tLibres_TOT: {self.blanco}\t\tFallos_TOT: {self.fallado}")
             else:
                 f.write(f"\n\n")
@@ -79,7 +80,7 @@ class Questionaire:
                     f.write(f"\n\tContestado: {self.contestado[id][1]}\tRespuesta correcta: {opcion_buena_JSON} ({self.qfile.data['emp_details'][i]["options"][0][opcion_buena_JSON]})")
                 id += 1
             # En caso de que haya un test anterior, se añade su contenido al final del fichero
-            if self.qfile.nombre_test_anterior != "":
+            if self.prev_test.flag_pmode:
                 f.write(f"\n\n")
                 for i in range(10,len(self.qfile.lineas)):
                     f.write(f"{self.qfile.lineas[i]}")

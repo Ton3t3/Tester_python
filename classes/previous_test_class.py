@@ -16,15 +16,28 @@ class PreviousTest:
         self.flag_pmode = False
         self.file_path = None
         
-    def turn_pflag(self):
-        self.flag_pmode = not self.flag_pmode
+    def off_pflag(self):
+        self.flag_pmode = False
+        self.frame_manager.prev_test_path.config(text="Select the previous test file")
+
+        self.qfile.lineas = None
+        self.qfile.preguntas_realizadas = []
+        self.shuffle.flag_shuffle = self.shuffle.flag_shuffle_interno
+        self.questionaire.correcto = 0
+        self.questionaire.blanco = 0
+        self.questionaire.fallado = 0
+        self.qfile.nombre_test_anterior = ""
+
+
+    def on_pflag(self):
+        self.flag_pmode = True
 
     def set_previous_test_path(self):
         self.file_path = filedialog.askopenfilename(initialdir=os.path.join(self.init.root_path, "TESTS ANTERIORES"), 
                                                   title="Seleccionar archivo previo",
                                                   filetypes=(("Archivos de texto", "*.txt"),))
         self.frame_manager.prev_test_path.config(text=self.file_path)
-        self.turn_pflag()
+        self.on_pflag()
     
     def load_previous_test(self):
         # if messagebox.askyesno("Continuar", "¿Desea continuar con un test previo?"):
