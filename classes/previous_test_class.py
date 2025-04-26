@@ -24,11 +24,11 @@ class PreviousTest:
                                                   title="Seleccionar archivo previo",
                                                   filetypes=(("Archivos de texto", "*.txt"),))
         self.frame_manager.prev_test_path.config(text=self.file_path)
+        self.turn_pflag()
     
     def load_previous_test(self):
         # if messagebox.askyesno("Continuar", "¿Desea continuar con un test previo?"):
             self.set_previous_test_path()
-            self.flag_pmode = True
             if self.file_path:
                 if self.qfile.nombre_fichero_preguntas[:-5] not in self.file_path:
                     messagebox.showerror("Error", "El archivo seleccionado no pertenece al fichero de preguntas seleccionado")
