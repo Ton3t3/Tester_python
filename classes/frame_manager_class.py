@@ -54,6 +54,13 @@ class FrameManager:
         self.add_frame("init_frame")
         f1 = self.get_frame("init_frame")
         
+        question_file_frame = tk.Frame(f1)
+        question_file_frame.pack(pady=10, anchor="center", fill="x")
+        question_file_button = tk.Radiobutton(question_file_frame, text="Seleccionar fichero de preguntas", command=self.qfile.load_question_file)
+        question_file_button.pack(side="left", padx=10)
+        self.question_file_path = tk.Label(question_file_frame, text="Seleccionar fichero de preguntas", wraplength=400, justify="left")
+        self.question_file_path.pack(side="left", padx=10)
+
         studio_button = tk.Checkbutton(f1, text="Modo Estudio", command=lambda:self.smode.turn_sflag(), onvalue=True, offvalue=False)
         studio_button.pack(pady=10)
 
@@ -135,7 +142,7 @@ class FrameManager:
         finish_button = tk.Button(button_frame, text="Terminar", command=self.smode.smode_end_test)
         finish_button.pack(side="left", padx=5)
 
-        self.study_status_label = tk.Label(self.root, text="MODO ESTUDIO")
+        self.study_status_label = tk.Label(f, text="MODO ESTUDIO")
         self.study_status_label.pack(pady=10)
 
         self.show_frame("study_frame")

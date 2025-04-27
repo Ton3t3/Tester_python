@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     initializer = Init(root)
     shuffle = Shuffle()
-    question_file = Question_file(initializer, None, shuffle, None, None)
+    question_file = Question_file(initializer, None, shuffle, None, None, None)
     questionaire = Questionaire(question_file, shuffle, None, initializer, root, None)
     question_file.questionaire = questionaire
     study_mode = SMode(question_file, None, root)
@@ -45,6 +45,7 @@ if __name__ == "__main__":
     question_file.smode = study_mode
     prev_test = PreviousTest(initializer, questionaire, shuffle, question_file, None)
     questionaire.prev_test = prev_test
+    question_file.prev_test = prev_test
     frame_manager = FrameManager(root, questionaire, question_file, shuffle, study_mode, prev_test, initializer)
     prev_test.frame_manager = frame_manager
     question_file.frame_manager = frame_manager
