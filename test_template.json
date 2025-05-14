@@ -1,0 +1,52 @@
+{
+  "emp_details": [
+    {
+      "test": "Test_name",
+      "question": "Question 1",
+      "options": [
+        {
+        "a": "Option A",
+        "b": "Option B", 
+        "c": "Option C",
+        "d": "Option D"
+        }] ,
+      "solution": "Correct answer (a/b/c/d)"
+    },
+    {
+      "test": "Test_name",
+      "question": "Question 2",
+      "options": [
+        {
+        "a": "Option A",
+        "b": "Option B", 
+        "c": "Option C",
+        "d": "Option D"
+        }] ,
+      "solution": "Correct answer (a/b/c/d)"
+    },
+    {
+      "test": "Test_name",
+      "question": "Question 3",
+      "options": [
+        {
+        "a": "Option A",
+        "b": "Option B", 
+        "c": "Option C",
+        "d": "Option D"
+        }] ,
+      "solution": "Correct answer (a/b/c/d)"
+    },
+    {
+      "test": "Test_name",
+      "question": "Question 4",
+      "options": [
+        {
+        "a": "Option A",
+        "b": "Option B", 
+        "c": "Option C",
+        "d": "Option D"
+        }] ,
+      "solution": "Correct answer (a/b/c/d)"
+    }
+  ]   
+}
