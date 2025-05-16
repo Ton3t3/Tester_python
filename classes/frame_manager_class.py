@@ -31,6 +31,8 @@ class FrameManager:
         self.study_options_var = None
         self.study_next_button = None
         self.study_previous_button = None
+        self.study_percentage_correct_label = None
+        self.study_percentage_incorrect_label = None
 
     def add_frame(self, name:str):
         frame = Frame(self.root)
@@ -142,7 +144,12 @@ class FrameManager:
         finish_button = tk.Button(button_frame, text="Terminar", command=self.smode.smode_end_test)
         finish_button.pack(side="left", padx=5)
 
-        self.study_status_label = tk.Label(f, text="MODO ESTUDIO")
-        self.study_status_label.pack(pady=10)
+        study_percentage_frame = tk.Frame(f)
+        study_percentage_frame.pack(pady=10, anchor="center", fill="x")
+        #Objetivo: Marcar el porcentaje de preguntas correctas e incorrectas mientras se va realizando el test
+        self.study_percentage_correct_label = tk.Label(study_percentage_frame, text="--%", bg="green")
+        self.study_percentage_correct_label.pack(side="left", padx=10)
+        self.study_percentage_incorrect_label = tk.Label(study_percentage_frame, text="--%", bg="red")
+        self.study_percentage_incorrect_label.pack(side="left", padx=10)
 
         self.show_frame("study_frame")

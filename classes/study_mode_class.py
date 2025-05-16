@@ -20,6 +20,11 @@ class SMode:
         self.previous_question_buffer = []
         self.actual_previous_id = 0
         self.actual_previous_bpos = 0
+        self.correct_percentage = 0
+        self.incorrect_percentage = 0
+        self.correct_questions = 0
+        self.incorrect_questions = 0
+        
     
     def turn_sflag(self):
         self.flag_smode = not self.flag_smode
@@ -74,10 +79,15 @@ class SMode:
             pregunta = self.qfile.data['emp_details'][self.qfile.current_question] 
             if respuesta == pregunta['solution']:
                 self.blink(self.frame_manager.study_options_buttons[self.letra_a_num(respuesta)], "#64ff33")
+                self.correct_questions += 1
             else:
                 self.blink(self.frame_manager.study_options_buttons[self.letra_a_num(respuesta)], "#C70039")
-
+                self.incorrect_questions += 1
             self.qfile.preguntas_realizadas.append(self.qfile.current_question)
+            self.correct_percentage = (self.correct_questions / len(self.qfile.preguntas_realizadas)) * 100
+            self.incorrect_percentage = (self.incorrect_questions / len(self.qfile.preguntas_realizadas)) * 100
+            self.frame_manager.study_percentage_correct_label.config(text=f"{self.correct_percentage:.2f}%")
+            self.frame_manager.study_percentage_incorrect_label.config(text=f"{self.incorrect_percentage:.2f}%")
             if len(self.qfile.preguntas_realizadas) == 1:
                 self.frame_manager.study_previous_button.config(state="normal")
             self.qfile.display_question()
