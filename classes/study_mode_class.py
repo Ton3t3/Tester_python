@@ -117,7 +117,7 @@ class SMode:
         self.frame_manager.study_question_label.config(text=pregunta["question"])
         opciones = pregunta["options"][0]
         
-
+        self.qfile.display_image(pregunta)
         for i, key in enumerate(self.qfile.opciones_preguntas):
             self.frame_manager.study_options_buttons[i].config(text=f"{key}: {opciones[key]}")
         

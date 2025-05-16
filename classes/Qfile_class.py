@@ -4,6 +4,7 @@ import datetime
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from random import choice
+from PIL import Image, ImageTk
 
 
 def load_data(root_fichero_preguntas):
@@ -22,6 +23,9 @@ class Question_file:
         
         self.root_fichero_preguntas = None      # Nombre del fichero de preguntas
         self.nombre_fichero_preguntas = ""    # Dirección del fichero de preguntas
+
+        self.root_fichero_imagenes = ""       # Nombre del directorio de imagenes
+        self.uso_de_imgs = True     
 
         self.data = None                        # Carga el fichero de preguntas
         self.num_preguntas = 0
@@ -52,11 +56,28 @@ class Question_file:
 
         self.prev_test.off_pflag()     #Borra el test previo si se ha seleccionado un nuevo test de preguntas
 
+    def load_image_folder(self):
+        self.root_fichero_imagenes = filedialog.askdirectory(initialdir=os.path.join(self.init.root_path), 
+                                                  title="Seleccionar directorio de imágenes")
+        
+        self.frame_manager.image_folder_path.config(text=self.root_fichero_imagenes)      
+
     def display_question(self):
         if self.nombre_fichero_preguntas == "":
             messagebox.showerror("Error", "No se ha seleccionado un fichero de preguntas")
             self.frame_manager.show_frame("init_frame")
             return
+
+        if self.root_fichero_imagenes == "":
+            for i in range(self.num_preguntas):
+                if len(self.data['emp_details'][i]) == 4:
+                    break
+                if self.data['emp_details'][i]["image"][0]['img_bool'] == True:
+                    messagebox.showerror("Error", "No se ha seleccionado un directorio de imágenes")
+                    self.frame_manager.show_frame("init_frame")
+                    return
+            self.uso_de_imgs = False
+
         if len(self.preguntas_realizadas) >= self.num_preguntas:
             if self.smode.flag_smode == False:
                 self.questionaire.end_test()
@@ -71,6 +92,7 @@ class Question_file:
         self.frame_manager.question_label.config(text=pregunta["question"]) if not self.smode.flag_smode else self.frame_manager.study_question_label.config(text=pregunta["question"])
         opciones = pregunta["options"][0]
         
+        self.display_image(pregunta)
 
         if not self.shuffle.flag_shuffle:
             for i, key in enumerate(self.opciones_preguntas):
@@ -82,3 +104,25 @@ class Question_file:
        
         self.frame_manager.options_var.set("") if not self.smode.flag_smode else self.frame_manager.study_options_var.set("")
     
+    def display_image(self, pregunta):
+        if not self.uso_de_imgs:
+            return
+        else:
+            bool_imagen = pregunta["image"][0]['img_bool']
+            if bool_imagen == False or self.uso_de_imgs == False:
+                if not self.smode.flag_smode:
+                    self.frame_manager.question_image.config(image="")
+                    self.frame_manager.question_image.image = None
+                else:
+                    self.frame_manager.study_question_image.config(image="")
+                    self.frame_manager.study_question_image.image = None
+            else:
+                nombre_imagen = pregunta["image"][0]['img_name']
+                imagen_select = Image.open(os.path.join(self.root_fichero_imagenes, nombre_imagen))
+                test = ImageTk.PhotoImage(imagen_select)
+                if not self.smode.flag_smode:
+                    self.frame_manager.question_image.config(image=test)
+                    self.frame_manager.question_image.image = test
+                else:
+                    self.frame_manager.study_question_image.config(image=test)
+                    self.frame_manager.study_question_image.image = test

@@ -2,10 +2,11 @@ import json
 import os
 import datetime
 import tkinter as tk
-from tkinter import messagebox, filedialog, Frame
+from tkinter import messagebox, filedialog, Frame, ttk
 from random import choice
 import random
 import time
+from PIL import Image, ImageTk
 
 
 class FrameManager:
@@ -24,6 +25,7 @@ class FrameManager:
         self.status_label = None
         self.options_buttons = None
         self.options_var = None
+        self.question_image = None
 
         self.study_question_label = None
         self.study_status_label = None
@@ -33,6 +35,7 @@ class FrameManager:
         self.study_previous_button = None
         self.study_percentage_correct_label = None
         self.study_percentage_incorrect_label = None
+        self.study_question_image = None
 
     def add_frame(self, name:str):
         frame = Frame(self.root)
@@ -56,20 +59,38 @@ class FrameManager:
         self.add_frame("init_frame")
         f1 = self.get_frame("init_frame")
         
-        question_file_frame = tk.Frame(f1)
+        #Método para que la ventana sea scrollable
+        init_canvas = tk.Canvas(f1)
+        init_canvas.pack(side="left", fill="both", expand=True)
+        init_scrollbar = ttk.Scrollbar(f1, orient="vertical", command=init_canvas.yview)
+        init_scrollbar.pack(side="right", fill="y")
+        init_canvas.configure(yscrollcommand=init_scrollbar.set)
+        init_canvas.bind("<Configure>", lambda e: init_canvas.configure(scrollregion=init_canvas.bbox("all")))
+
+        init_frame = tk.Frame(init_canvas)
+        init_canvas.create_window((0, 0), window=init_frame, anchor="nw")
+
+        question_file_frame = tk.Frame(init_frame)
         question_file_frame.pack(pady=10, anchor="center", fill="x")
         question_file_button = tk.Radiobutton(question_file_frame, text="Seleccionar fichero de preguntas", command=self.qfile.load_question_file)
         question_file_button.pack(side="left", padx=10)
         self.question_file_path = tk.Label(question_file_frame, text="Seleccionar fichero de preguntas", wraplength=400, justify="left")
         self.question_file_path.pack(side="left", padx=10)
 
-        studio_button = tk.Checkbutton(f1, text="Modo Estudio", command=lambda:self.smode.turn_sflag(), onvalue=True, offvalue=False)
+        image_file_frame = tk.Frame(init_frame)
+        image_file_frame.pack(pady=10, anchor="center", fill="x")
+        image_file_button = tk.Radiobutton(image_file_frame, text="Seleccionar directorio de imágenes", command=self.qfile.load_image_folder)
+        image_file_button.pack(side="left", padx=10)
+        self.image_folder_path = tk.Label(image_file_frame, text="Seleccionar directorio de imágenes", wraplength=400, justify="left")
+        self.image_folder_path.pack(side="left", padx=10)
+
+        studio_button = tk.Checkbutton(init_frame, text="Modo Estudio", command=lambda:self.smode.turn_sflag(), onvalue=True, offvalue=False)
         studio_button.pack(pady=10)
 
-        shuffle_button = tk.Checkbutton(f1, text="Modo Shuffle", command=lambda:self.shuffle.turn_shuffle_flag(), onvalue=True, offvalue=False)   
+        shuffle_button = tk.Checkbutton(init_frame, text="Modo Shuffle", command=lambda:self.shuffle.turn_shuffle_flag(), onvalue=True, offvalue=False)   
         shuffle_button.pack(pady=10)
 
-        prev_test_frame = tk.Frame(f1)
+        prev_test_frame = tk.Frame(init_frame)
         prev_test_frame.pack(pady=10, anchor="center", fill="x")
         prev_button = tk.Radiobutton(prev_test_frame, text="Previous Test", command=self.prev_test.load_previous_test)
         prev_button.pack(side="left", padx=10)
@@ -78,24 +99,38 @@ class FrameManager:
         cancel_prev_button = tk.Button(prev_test_frame, text="Cancel", command=self.prev_test.off_pflag)
         cancel_prev_button.pack(side="left", padx=10)
         
-        start_button = tk.Button(f1, text="Iniciar Test", command=self.init.start_test)
+        start_button = tk.Button(init_frame, text="Iniciar Test", command=self.init.start_test)
         start_button.pack(pady=10)
 
     def test_frame(self):
         self.add_frame("test_frame")
         f = self.get_frame("test_frame")
 
-        self.question_label = tk.Label(f, text="Pregunta", wraplength=400, justify="left")
+        #Método para que la ventana sea scrollable
+        test_canvas = tk.Canvas(f)
+        test_canvas.pack(side="left", fill="both", expand=True)
+        test_scrollbar = ttk.Scrollbar(f, orient="vertical", command=test_canvas.yview)
+        test_scrollbar.pack(side="right", fill="y")
+        test_canvas.configure(yscrollcommand=test_scrollbar.set)
+        test_canvas.bind("<Configure>", lambda e: test_canvas.configure(scrollregion=test_canvas.bbox("all")))
+
+        test_frame = tk.Frame(test_canvas)
+        test_canvas.create_window((0, 0), window=test_frame, anchor="nw")
+
+        self.question_image = tk.Label(test_frame)
+        self.question_image.pack(pady=10)
+
+        self.question_label = tk.Label(test_frame, text="Pregunta", wraplength=400, justify="left")
         self.question_label.pack(pady=10)
         
         self.options_var = tk.StringVar()
         self.options_buttons = []
         for i in self.qfile.opciones_preguntas:
-            button = tk.Radiobutton(f, text="", variable=self.options_var, value=i)
+            button = tk.Radiobutton(test_frame, text="", variable=self.options_var, value=i)
             button.pack(anchor="w")
             self.options_buttons.append(button)
 
-        button_frame = tk.Frame(f)
+        button_frame = tk.Frame(test_frame)
         button_frame.pack(pady=10, anchor="center", fill="x")
 
         clean_button = tk.Button(button_frame, text="Borrar", command=self.questionaire.reset_selection)
@@ -107,9 +142,9 @@ class FrameManager:
         finish_button = tk.Button(button_frame, text="Terminar", command=self.questionaire.end_test)
         finish_button.pack(side="left", padx=5)
         if self.prev_test.flag_pmode:
-            self.status_label = tk.Label(f, text=f"Estado: {self.questionaire.correcto} correctos, {self.questionaire.fallado} fallados, {self.questionaire.blanco} en blanco")
+            self.status_label = tk.Label(test_frame, text=f"Estado: {self.questionaire.correcto} correctos, {self.questionaire.fallado} fallados, {self.questionaire.blanco} en blanco")
         else:
-            self.status_label = tk.Label(f, text="Estado: 0 correctos, 0 fallados, 0 en blanco")
+            self.status_label = tk.Label(test_frame, text="Estado: 0 correctos, 0 fallados, 0 en blanco")
         self.status_label.pack(pady=10)
         self.show_frame("test_frame")
 
@@ -118,17 +153,31 @@ class FrameManager:
         self.add_frame("study_frame")
         f = self.get_frame("study_frame")
 
-        self.study_question_label = tk.Label(f, text="Pregunta", wraplength=400, justify="left")
+        #Método para que la ventana sea scrollable
+        study_canvas = tk.Canvas(f)
+        study_canvas.pack(side="left", fill="both", expand=True)
+        study_scrollbar = ttk.Scrollbar(f, orient="vertical", command=study_canvas.yview)
+        study_scrollbar.pack(side="right", fill="y")
+        study_canvas.configure(yscrollcommand=study_scrollbar.set)
+        study_canvas.bind("<Configure>", lambda e: study_canvas.configure(scrollregion=study_canvas.bbox("all")))
+
+        study_frame = tk.Frame(study_canvas)
+        study_canvas.create_window((0, 0), window=study_frame, anchor="nw")
+
+        self.study_question_image = tk.Label(study_frame)
+        self.study_question_image.pack(pady=10)
+
+        self.study_question_label = tk.Label(study_frame, text="Pregunta", wraplength=400, justify="left")
         self.study_question_label.pack(pady=10)
         
         self.study_options_var = tk.StringVar()
         self.study_options_buttons = []
         for i in self.qfile.opciones_preguntas:
-            button = tk.Radiobutton(f, text="", variable=self.study_options_var, value=i)
+            button = tk.Radiobutton(study_frame, text="", variable=self.study_options_var, value=i)
             button.pack(anchor="w")
             self.study_options_buttons.append(button)
 
-        button_frame = tk.Frame(f)
+        button_frame = tk.Frame(study_frame)
         button_frame.pack(pady=10, anchor="center", fill="x")
 
         clean_button = tk.Button(button_frame, text="Borrar", command=self.smode.smode_reset_selection)
@@ -144,7 +193,7 @@ class FrameManager:
         finish_button = tk.Button(button_frame, text="Terminar", command=self.smode.smode_end_test)
         finish_button.pack(side="left", padx=5)
 
-        study_percentage_frame = tk.Frame(f)
+        study_percentage_frame = tk.Frame(study_frame)
         study_percentage_frame.pack(pady=10, anchor="center", fill="x")
         #Objetivo: Marcar el porcentaje de preguntas correctas e incorrectas mientras se va realizando el test
         self.study_percentage_correct_label = tk.Label(study_percentage_frame, text="--%", bg="green")
