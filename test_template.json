@@ -10,7 +10,13 @@
         "c": "Option C",
         "d": "Option D"
         }] ,
-      "solution": "Correct answer (a/b/c/d)"
+      "solution": "Correct answer (a/b/c/d)",
+      "image": [
+        {
+          "img_bool": 1,
+          "img_name": "image1.jpg"
+        }
+      ]
     },
     {
       "test": "Test_name",
@@ -22,31 +28,13 @@
         "c": "Option C",
         "d": "Option D"
         }] ,
-      "solution": "Correct answer (a/b/c/d)"
-    },
-    {
-      "test": "Test_name",
-      "question": "Question 3",
-      "options": [
+      "solution": "Correct answer (a/b/c/d)",
+      "image": [
         {
-        "a": "Option A",
-        "b": "Option B", 
-        "c": "Option C",
-        "d": "Option D"
-        }] ,
-      "solution": "Correct answer (a/b/c/d)"
-    },
-    {
-      "test": "Test_name",
-      "question": "Question 4",
-      "options": [
-        {
-        "a": "Option A",
-        "b": "Option B", 
-        "c": "Option C",
-        "d": "Option D"
-        }] ,
-      "solution": "Correct answer (a/b/c/d)"
+          "img_bool": 0,
+          "img_name": ""
+        }
+      ]
     }
   ]   
 }
