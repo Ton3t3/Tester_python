@@ -85,7 +85,6 @@ class Question_file:
             else:
                 self.smode.smode_end_test()
                 return
-
         self.current_question = choice([i for i in range(self.num_preguntas) if i not in self.preguntas_realizadas])
         pregunta = self.data['emp_details'][self.current_question]
         
@@ -101,7 +100,8 @@ class Question_file:
             letras_preguntas_mezcladas = self.shuffle.mezclador_letras(self.opciones_preguntas, pregunta, self.opciones_preguntas)
             for i, key in enumerate(letras_preguntas_mezcladas):
                 self.frame_manager.options_buttons[i].config(text=f"{self.opciones_preguntas[i]}: {opciones[key]}") if not self.smode.flag_smode else self.frame_manager.study_options_buttons[i].config(text=f"{self.opciones_preguntas[i]}: {opciones[key]}")          
-       
+        
+        self.frame_manager.adjust_canvas(self.frame_manager.test_canvas, self.frame_manager.test_frame) if not self.smode.flag_smode else self.frame_manager.adjust_canvas(self.frame_manager.study_canvas, self.frame_manager.study_frame)
         self.frame_manager.options_var.set("") if not self.smode.flag_smode else self.frame_manager.study_options_var.set("")
     
     def display_image(self, pregunta):

@@ -57,14 +57,14 @@ class FrameManager:
 
     def init_frame(self):
         self.add_frame("init_frame")
-        f1 = self.get_frame("init_frame")
+        f = self.get_frame("init_frame")
         
         #Método para que la ventana sea scrollable
-        init_canvas = tk.Canvas(f1)
+        init_canvas = tk.Canvas(f)
         init_canvas.pack(side="left", fill="both", expand=True)
-        init_scrollbar = ttk.Scrollbar(f1, orient="vertical", command=init_canvas.yview)
-        init_scrollbar.pack(side="right", fill="y")
-        init_canvas.configure(yscrollcommand=init_scrollbar.set)
+        y_scrollbar = ttk.Scrollbar(f, orient="vertical", command=init_canvas.yview)
+        y_scrollbar.pack(side="right", fill="y")
+        init_canvas.configure(yscrollcommand=y_scrollbar.set)
         init_canvas.bind("<Configure>", lambda e: init_canvas.configure(scrollregion=init_canvas.bbox("all")))
 
         init_frame = tk.Frame(init_canvas)
@@ -107,30 +107,31 @@ class FrameManager:
         f = self.get_frame("test_frame")
 
         #Método para que la ventana sea scrollable
-        test_canvas = tk.Canvas(f)
-        test_canvas.pack(side="left", fill="both", expand=True)
-        test_scrollbar = ttk.Scrollbar(f, orient="vertical", command=test_canvas.yview)
-        test_scrollbar.pack(side="right", fill="y")
-        test_canvas.configure(yscrollcommand=test_scrollbar.set)
-        test_canvas.bind("<Configure>", lambda e: test_canvas.configure(scrollregion=test_canvas.bbox("all")))
+        self.test_canvas = tk.Canvas(f)
+        self.test_canvas.pack(side="left", fill="both", expand=True)
+        y_scrollbar = ttk.Scrollbar(f, orient="vertical", command=self.test_canvas.yview)
+        y_scrollbar.pack(side="right", fill="y")
+        self.test_canvas.configure(yscrollcommand=y_scrollbar.set)
+        self.test_canvas.bind("<Configure>", lambda e: self.test_canvas.configure(scrollregion=self.test_canvas.bbox("all")))
+        self.test_canvas.bind_all("<MouseWheel>", lambda event: self.test_canvas.yview_scroll(int(-1*(event.delta/120)), "units"))
 
-        test_frame = tk.Frame(test_canvas)
-        test_canvas.create_window((0, 0), window=test_frame, anchor="nw")
+        self.test_frame = tk.Frame(self.test_canvas)
+        self.test_canvas.create_window((0, 0), window=self.test_frame, anchor="nw")
 
-        self.question_image = tk.Label(test_frame)
+        self.question_image = tk.Label(self.test_frame)
         self.question_image.pack(pady=10)
 
-        self.question_label = tk.Label(test_frame, text="Pregunta", wraplength=400, justify="left")
+        self.question_label = tk.Label(self.test_frame, text="Pregunta", wraplength=400, justify="left")
         self.question_label.pack(pady=10)
         
         self.options_var = tk.StringVar()
         self.options_buttons = []
         for i in self.qfile.opciones_preguntas:
-            button = tk.Radiobutton(test_frame, text="", variable=self.options_var, value=i)
+            button = tk.Radiobutton(self.test_frame, text="", variable=self.options_var, value=i)
             button.pack(anchor="w")
             self.options_buttons.append(button)
 
-        button_frame = tk.Frame(test_frame)
+        button_frame = tk.Frame(self.test_frame)
         button_frame.pack(pady=10, anchor="center", fill="x")
 
         clean_button = tk.Button(button_frame, text="Borrar", command=self.questionaire.reset_selection)
@@ -142,9 +143,9 @@ class FrameManager:
         finish_button = tk.Button(button_frame, text="Terminar", command=self.questionaire.end_test)
         finish_button.pack(side="left", padx=5)
         if self.prev_test.flag_pmode:
-            self.status_label = tk.Label(test_frame, text=f"Estado: {self.questionaire.correcto} correctos, {self.questionaire.fallado} fallados, {self.questionaire.blanco} en blanco")
+            self.status_label = tk.Label(self.test_frame, text=f"Estado: {self.questionaire.correcto} correctos, {self.questionaire.fallado} fallados, {self.questionaire.blanco} en blanco")
         else:
-            self.status_label = tk.Label(test_frame, text="Estado: 0 correctos, 0 fallados, 0 en blanco")
+            self.status_label = tk.Label(self.test_frame, text="Estado: 0 correctos, 0 fallados, 0 en blanco")
         self.status_label.pack(pady=10)
         self.show_frame("test_frame")
 
@@ -154,30 +155,32 @@ class FrameManager:
         f = self.get_frame("study_frame")
 
         #Método para que la ventana sea scrollable
-        study_canvas = tk.Canvas(f)
-        study_canvas.pack(side="left", fill="both", expand=True)
-        study_scrollbar = ttk.Scrollbar(f, orient="vertical", command=study_canvas.yview)
-        study_scrollbar.pack(side="right", fill="y")
-        study_canvas.configure(yscrollcommand=study_scrollbar.set)
-        study_canvas.bind("<Configure>", lambda e: study_canvas.configure(scrollregion=study_canvas.bbox("all")))
+        self.study_canvas = tk.Canvas(f)
+        self.study_canvas.pack(side="left", fill="both", expand=True)
+        y_scrollbar = ttk.Scrollbar(f, orient="vertical", command=self.study_canvas.yview)
+        y_scrollbar.pack(side="right", fill="y")
+        self.study_canvas.configure(yscrollcommand=y_scrollbar.set)
+        self.study_canvas.bind("<Configure>", lambda e: self.study_canvas.configure(scrollregion=self.study_canvas.bbox("all")))
+        self.study_canvas.bind_all("<MouseWheel>", lambda event: self.study_canvas.yview_scroll(int(-1*(event.delta/120)), "units"))
 
-        study_frame = tk.Frame(study_canvas)
-        study_canvas.create_window((0, 0), window=study_frame, anchor="nw")
 
-        self.study_question_image = tk.Label(study_frame)
+        self.study_frame = tk.Frame(self.study_canvas)
+        self.study_canvas.create_window((0, 0), window=self.study_frame, anchor="nw")
+
+        self.study_question_image = tk.Label(self.study_frame)
         self.study_question_image.pack(pady=10)
 
-        self.study_question_label = tk.Label(study_frame, text="Pregunta", wraplength=400, justify="left")
+        self.study_question_label = tk.Label(self.study_frame, text="Pregunta", wraplength=400, justify="left")
         self.study_question_label.pack(pady=10)
         
         self.study_options_var = tk.StringVar()
         self.study_options_buttons = []
         for i in self.qfile.opciones_preguntas:
-            button = tk.Radiobutton(study_frame, text="", variable=self.study_options_var, value=i)
+            button = tk.Radiobutton(self.study_frame, text="", variable=self.study_options_var, value=i)
             button.pack(anchor="w")
             self.study_options_buttons.append(button)
 
-        button_frame = tk.Frame(study_frame)
+        button_frame = tk.Frame(self.study_frame)
         button_frame.pack(pady=10, anchor="center", fill="x")
 
         clean_button = tk.Button(button_frame, text="Borrar", command=self.smode.smode_reset_selection)
@@ -193,7 +196,7 @@ class FrameManager:
         finish_button = tk.Button(button_frame, text="Terminar", command=self.smode.smode_end_test)
         finish_button.pack(side="left", padx=5)
 
-        study_percentage_frame = tk.Frame(study_frame)
+        study_percentage_frame = tk.Frame(self.study_frame)
         study_percentage_frame.pack(pady=10, anchor="center", fill="x")
         #Objetivo: Marcar el porcentaje de preguntas correctas e incorrectas mientras se va realizando el test
         self.study_percentage_correct_label = tk.Label(study_percentage_frame, text="--%", bg="green")
@@ -202,3 +205,11 @@ class FrameManager:
         self.study_percentage_incorrect_label.pack(side="left", padx=10)
 
         self.show_frame("study_frame")
+    
+    def adjust_canvas(self, selected_canvas, selected_frame):
+        selected_canvas.yview_moveto(0)
+        selected_canvas.after(100,self.update_scrollregion, selected_canvas, selected_frame)
+
+    def update_scrollregion(self, selected_canvas, selected_frame):
+        selected_frame.update_idletasks()
+        selected_canvas.configure(scrollregion=selected_canvas.bbox("all"))

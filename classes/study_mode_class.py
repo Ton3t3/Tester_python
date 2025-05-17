@@ -118,6 +118,7 @@ class SMode:
         opciones = pregunta["options"][0]
         
         self.qfile.display_image(pregunta)
+
         for i, key in enumerate(self.qfile.opciones_preguntas):
             self.frame_manager.study_options_buttons[i].config(text=f"{key}: {opciones[key]}")
         
@@ -131,6 +132,7 @@ class SMode:
                 self.frame_manager.study_options_buttons[i].config(foreground="#000000")
                 # self.frame_manager.study_options_buttons[i].config(foreground="#000000")
 
+        self.frame_manager.adjust_canvas(self.frame_manager.study_canvas, self.frame_manager.study_frame)
         self.frame_manager.study_options_var.set("")
 
         
