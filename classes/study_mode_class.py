@@ -132,7 +132,7 @@ class SMode:
                 self.frame_manager.study_options_buttons[i].config(foreground="#000000")
                 # self.frame_manager.study_options_buttons[i].config(foreground="#000000")
 
-        self.frame_manager.adjust_canvas(self.frame_manager.study_canvas, self.frame_manager.study_frame)
+        self.frame_manager.adjust_canvas(self.frame_manager.current_canvas, self.frame_manager.current_frame)
         self.frame_manager.study_options_var.set("")
 
         

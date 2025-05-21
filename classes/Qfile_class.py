@@ -74,6 +74,7 @@ class Question_file:
                     break
                 if self.data['emp_details'][i]["image"][0]['img_bool'] == True:
                     messagebox.showerror("Error", "No se ha seleccionado un directorio de imágenes")
+                    self.frame_manager.remove_frame("test_frame")
                     self.frame_manager.show_frame("init_frame")
                     return
             self.uso_de_imgs = False
@@ -101,7 +102,7 @@ class Question_file:
             for i, key in enumerate(letras_preguntas_mezcladas):
                 self.frame_manager.options_buttons[i].config(text=f"{self.opciones_preguntas[i]}: {opciones[key]}") if not self.smode.flag_smode else self.frame_manager.study_options_buttons[i].config(text=f"{self.opciones_preguntas[i]}: {opciones[key]}")          
         
-        self.frame_manager.adjust_canvas(self.frame_manager.test_canvas, self.frame_manager.test_frame) if not self.smode.flag_smode else self.frame_manager.adjust_canvas(self.frame_manager.study_canvas, self.frame_manager.study_frame)
+        self.frame_manager.adjust_canvas(self.frame_manager.current_canvas, self.frame_manager.current_frame)
         self.frame_manager.options_var.set("") if not self.smode.flag_smode else self.frame_manager.study_options_var.set("")
     
     def display_image(self, pregunta):
