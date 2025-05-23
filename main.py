@@ -17,8 +17,8 @@ class Init:
     def __init__(self, root):
         self.root = root
         self.root.title("Test de Preguntas")
-        self.root_path = os.path.dirname(sys.executable)           #PARA .EXE!!!!
-        # self.root_path = os.path.dirname(os.path.abspath(__file__))       #PARA .PY!!!!!
+        # self.root_path = os.path.dirname(sys.executable)           #PARA .EXE!!!!
+        self.root_path = os.path.dirname(os.path.abspath(__file__))       #PARA .PY!!!!!
 
     def start_test(self):
         if study_mode.flag_smode:
