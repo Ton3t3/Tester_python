@@ -27,6 +27,8 @@ class PreviousTest:
         self.questionaire.blanco = 0
         self.questionaire.fallado = 0
         self.qfile.nombre_test_anterior = ""
+        self.qfile.test_title = ""
+        self.frame_manager.combo.current(0)
 
 
     def on_pflag(self):
@@ -59,6 +61,8 @@ class PreviousTest:
                     with open(self.file_path, "r") as f:
                         lineas = f.readlines()
                         self.qfile.lineas = lineas
+                        self.qfile.test_title = lineas[1].split(": ")[1].strip()
+                        self.qfile.set_num_preguntas()
                         self.qfile.preguntas_realizadas = [int(i.translate({ord(c): None for c in '[,]'})) for i in lineas[4].split()]
                         self.shuffle.flag_shuffle = bool(int(lineas[2].split()[-1]))
                         self.questionaire.correcto = int(lineas[5].split()[0].translate({ord(c): None for c in '[,]'}))

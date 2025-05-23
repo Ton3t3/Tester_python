@@ -85,6 +85,14 @@ class FrameManager:
         self.question_file_path = tk.Label(question_file_frame, text="Seleccionar fichero de preguntas", wraplength=400, justify="left")
         self.question_file_path.pack(side="left", padx=10)
 
+        test_name_frame = tk.Frame(init_frame_var)
+        test_name_frame.pack(pady=10, anchor="center", fill="x")
+        test_name_label = tk.Label(test_name_frame, text="Seleccionar el test a realizar")
+        test_name_label.pack(side="left", padx=10)
+        self.combo = ttk.Combobox(test_name_frame, values=[], state="readonly")
+        self.combo.pack(side="left", padx=10)
+        self.combo.bind("<<ComboboxSelected>>", self.check_box)
+
         image_file_frame = tk.Frame(init_frame_var)
         image_file_frame.pack(pady=10, anchor="center", fill="x")
         image_file_button = tk.Radiobutton(image_file_frame, text="Seleccionar directorio de imágenes", command=self.qfile.load_image_folder)
@@ -225,3 +233,7 @@ class FrameManager:
     def update_scrollregion(self, selected_canvas, selected_frame):
         selected_frame.update_idletasks()
         selected_canvas.configure(scrollregion=selected_canvas.bbox("all"))
+
+    def check_box(self, event):
+        self.qfile.test_title = self.combo.get()
+        self.qfile.set_num_preguntas()   

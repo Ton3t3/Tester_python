@@ -17,16 +17,16 @@ class Init:
     def __init__(self, root):
         self.root = root
         self.root.title("Test de Preguntas")
-        # self.root_path = os.path.dirname(sys.executable)           #PARA .EXE!!!!
-        self.root_path = os.path.dirname(os.path.abspath(__file__))       #PARA .PY!!!!!
+        self.root_path = os.path.dirname(sys.executable)           #PARA .EXE!!!!
+        # self.root_path = os.path.dirname(os.path.abspath(__file__))       #PARA .PY!!!!!
 
     def start_test(self):
         if study_mode.flag_smode:
             frame_manager.study_frame()
-            self.root.title(f"Test de Preguntas [Test: {question_file.nombre_fichero_preguntas[:-5]}] [STUDY MODE: ON]")
+            self.root.title(f"Test de Preguntas [Test: {question_file.nombre_fichero_preguntas[:-5]}] [STUDY MODE: ON] [Test name: {question_file.test_title}]")
         else:
             frame_manager.test_frame()
-            self.root.title(f"Test de Preguntas [Test: {question_file.nombre_fichero_preguntas[:-5]}] [Shuffle: {"ON" if int(shuffle.flag_shuffle) == 1 else "OFF"}]")
+            self.root.title(f"Test de Preguntas [Test: {question_file.nombre_fichero_preguntas[:-5]}] [Shuffle: {"ON" if int(shuffle.flag_shuffle) == 1 else "OFF"}] [Test name: {question_file.test_title}]")
         question_file.display_question()
 
 

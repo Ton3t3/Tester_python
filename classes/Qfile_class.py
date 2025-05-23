@@ -29,7 +29,11 @@ class Question_file:
 
         self.data = None                        # Carga el fichero de preguntas
         self.num_preguntas = 0
+        self.num_preguntas_totales = 0         # Número de preguntas totales en el fichero
         self.num_opciones_preguntas = 0         # Número de preguntas totales en el test
+        self.test_names = None
+        self.num_preguntas_per_test = None
+        self.test_title = ""
 
         self.opciones_preguntas = []
         self.alfabeto = ["a", "b", "c", "d", "e", "f", "g"]
@@ -47,14 +51,31 @@ class Question_file:
         self.nombre_fichero_preguntas = os.path.basename(self.root_fichero_preguntas)
 
         self.data = load_data(self.root_fichero_preguntas)      
-        self.num_preguntas = len(self.data['emp_details'])
+        self.num_preguntas_totales = len(self.data['emp_details'])
         self.num_opciones_preguntas = len(self.data['emp_details'][0]['options'][0])
         self.frame_manager.question_file_path.config(text=self.nombre_fichero_preguntas)      
 
         for i in range(0,self.num_opciones_preguntas):
             self.opciones_preguntas.append(self.alfabeto[i])
 
+        [self.test_names, self.num_preguntas_per_test] = self.get_test_names(self.data, self.num_preguntas_totales)
+        self.frame_manager.combo.config(values=self.test_names)
+        self.frame_manager.combo.current(0)
+        
         self.prev_test.off_pflag()     #Borra el test previo si se ha seleccionado un nuevo test de preguntas
+
+    def get_test_names(self, data, num_preguntas_totales):
+        output_array = ["All tests"]
+        raw_output_array = []
+        for i in range(0, num_preguntas_totales):
+            if data['emp_details'][i]['test'] not in output_array:
+                output_array.append(data['emp_details'][i]['test'])
+            raw_output_array.append(data['emp_details'][i]['test'])
+            num_preguntas_per_test = []
+            for j in range(1,len(output_array)):
+                aux = raw_output_array.count(output_array[j])
+                num_preguntas_per_test.append(aux)
+        return output_array, num_preguntas_per_test
 
     def load_image_folder(self):
         self.root_fichero_imagenes = filedialog.askdirectory(initialdir=os.path.join(self.init.root_path), 
@@ -79,6 +100,10 @@ class Question_file:
                     return
             self.uso_de_imgs = False
 
+        if self.test_title == "":
+            self.test_title = self.frame_manager.combo.get()
+            self.set_num_preguntas()
+
         if len(self.preguntas_realizadas) >= self.num_preguntas:
             if self.smode.flag_smode == False:
                 self.questionaire.end_test()
@@ -86,7 +111,10 @@ class Question_file:
             else:
                 self.smode.smode_end_test()
                 return
-        self.current_question = choice([i for i in range(self.num_preguntas) if i not in self.preguntas_realizadas])
+        if self.test_title == "All tests":
+            self.current_question = choice([i for i in range(self.num_preguntas_totales) if (i not in self.preguntas_realizadas)])
+        else:
+            self.current_question = choice([i for i in range(self.num_preguntas_totales) if ((i not in self.preguntas_realizadas) and (self.data['emp_details'][i]['test'] == self.test_title))])
         pregunta = self.data['emp_details'][self.current_question]
         
         self.frame_manager.question_label.config(text=pregunta["question"]) if not self.smode.flag_smode else self.frame_manager.study_question_label.config(text=pregunta["question"])
@@ -127,3 +155,14 @@ class Question_file:
                 else:
                     self.frame_manager.study_question_image.config(image=test)
                     self.frame_manager.study_question_image.image = test
+
+    def set_num_preguntas(self):
+        if self.test_title == "All tests" or self.test_title == "":
+            self.num_preguntas = len(self.data['emp_details'])
+            # print(f"Num preguntas para test All tests: {self.num_preguntas}")
+        else:
+            for i in range(1, len(self.test_names)):
+                if self.test_title == self.test_names[i]:
+                    self.num_preguntas = self.num_preguntas_per_test[i-1]
+                    # print(f"Num preguntas para test {self.qfile.test_names[i]}: {self.qfile.num_preguntas}")
+                    break

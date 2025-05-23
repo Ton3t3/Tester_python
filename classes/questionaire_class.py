@@ -52,14 +52,15 @@ class Questionaire:
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
         with open(save_path, "w") as f:
-            f.write(f"FINAL DEL TEST {datetime.datetime.now().isoformat()}\n")
+            f.write(f"FINAL DEL TEST {datetime.datetime.now().isoformat()}")
+            f.write(f"\nTest: {self.qfile.test_title}")
             f.write(f"\nShuffle ON(1)/OFF(0): {int(self.shuffle.flag_shuffle)}")
             f.write(f"\nTotal de pregunta realizadas: {len(self.qfile.preguntas_realizadas)}")
             f.write(f"\n{self.qfile.preguntas_realizadas}")
             f.write(f"\n{[self.correcto, self.blanco, self.fallado]}")
 
            
-            if not self.prev_test.flag_pmode:
+            if self.prev_test.flag_pmode:
                 f.write(f"\n\nAciertos_TOT: {self.correcto}\t\tLibres_TOT: {self.blanco}\t\tFallos_TOT: {self.fallado}")
             else:
                 f.write(f"\n\n")
