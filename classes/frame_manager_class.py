@@ -92,6 +92,8 @@ class FrameManager:
         self.combo = ttk.Combobox(test_name_frame, values=[], state="readonly")
         self.combo.pack(side="left", padx=10)
         self.combo.bind("<<ComboboxSelected>>", self.check_box)
+        self.number_of_questions_label = tk.Label(test_name_frame, text="Número de preguntas: 0")
+        self.number_of_questions_label.pack(side="left", padx=10)
 
         image_file_frame = tk.Frame(init_frame_var)
         image_file_frame.pack(pady=10, anchor="center", fill="x")
@@ -160,11 +162,15 @@ class FrameManager:
 
         finish_button = tk.Button(button_frame, text="Terminar", command=self.questionaire.end_test)
         finish_button.pack(side="left", padx=5)
+        bottom_frame = tk.Frame(self.test_frame_var)
+        bottom_frame.pack(pady=10, anchor="center", fill="x")
         if self.prev_test.flag_pmode:
-            self.status_label = tk.Label(self.test_frame_var, text=f"Estado: {self.questionaire.correcto} correctos, {self.questionaire.fallado} fallados, {self.questionaire.blanco} en blanco")
+            self.status_label = tk.Label(bottom_frame, text=f"Estado: {self.questionaire.correcto} correctos, {self.questionaire.fallado} fallados, {self.questionaire.blanco} en blanco")
         else:
-            self.status_label = tk.Label(self.test_frame_var, text="Estado: 0 correctos, 0 fallados, 0 en blanco")
-        self.status_label.pack(pady=10)
+            self.status_label = tk.Label(bottom_frame, text="Estado: 0 correctos, 0 fallados, 0 en blanco")
+        self.status_label.pack(side="left", padx=10)
+        self.question_id_label = tk.Label(bottom_frame, text=f"Respondidas: {len(self.qfile.preguntas_realizadas)}/{self.qfile.num_preguntas}")
+        self.question_id_label.pack(side="left", padx=10)
         self.show_frame("test_frame")
 
 
@@ -206,7 +212,7 @@ class FrameManager:
         clean_button = tk.Button(button_frame, text="Borrar", command=self.smode.smode_reset_selection)
         clean_button.pack(side="left", padx=5)
 
-        self.study_previous_button = tk.Button(button_frame, text="Previous", command=self.smode.smode_previous_question)
+        self.study_previous_button = tk.Button(button_frame, text="Previous", command=self.smode.smode_previous_question, state="disabled")
         self.study_previous_button.pack(side="left", padx=5)
         
 
@@ -223,6 +229,8 @@ class FrameManager:
         self.study_percentage_correct_label.pack(side="left", padx=10)
         self.study_percentage_incorrect_label = tk.Label(study_percentage_frame, text="--%", bg="red")
         self.study_percentage_incorrect_label.pack(side="left", padx=10)
+        self.study_question_id_label = tk.Label(study_percentage_frame, text=f"Respondidas: {len(self.qfile.preguntas_realizadas)}/{self.qfile.num_preguntas}")
+        self.study_question_id_label.pack(side="left", padx=10)
 
         self.show_frame("study_frame")
     

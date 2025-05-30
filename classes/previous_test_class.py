@@ -29,6 +29,9 @@ class PreviousTest:
         self.qfile.nombre_test_anterior = ""
         self.qfile.test_title = ""
         self.frame_manager.combo.current(0)
+        # self.qfile.opciones_preguntas = []
+        self.qfile.num_preguntas = len(self.qfile.data['emp_details'])
+        self.frame_manager.number_of_questions_label.config(text=f"Número de preguntas: {self.qfile.num_preguntas}")
 
 
     def on_pflag(self):

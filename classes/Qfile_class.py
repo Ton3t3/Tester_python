@@ -54,6 +54,7 @@ class Question_file:
         self.num_preguntas_totales = len(self.data['emp_details'])
         self.num_opciones_preguntas = len(self.data['emp_details'][0]['options'][0])
         self.frame_manager.question_file_path.config(text=self.nombre_fichero_preguntas)      
+        self.opciones_preguntas = []
 
         for i in range(0,self.num_opciones_preguntas):
             self.opciones_preguntas.append(self.alfabeto[i])
@@ -62,7 +63,10 @@ class Question_file:
         self.frame_manager.combo.config(values=self.test_names)
         self.frame_manager.combo.current(0)
         
-        self.prev_test.off_pflag()     #Borra el test previo si se ha seleccionado un nuevo test de preguntas
+        self.num_preguntas = len(self.data['emp_details'])
+        self.frame_manager.number_of_questions_label.config(text=f"Número de preguntas: {self.num_preguntas}")
+        if self.prev_test.flag_pmode:
+            self.prev_test.off_pflag()     #Borra el test previo si se ha seleccionado un nuevo test de preguntas
 
     def get_test_names(self, data, num_preguntas_totales):
         output_array = ["All tests"]
@@ -118,6 +122,8 @@ class Question_file:
         pregunta = self.data['emp_details'][self.current_question]
         
         self.frame_manager.question_label.config(text=pregunta["question"]) if not self.smode.flag_smode else self.frame_manager.study_question_label.config(text=pregunta["question"])
+        self.frame_manager.question_id_label.config(text=f"Respondidas: {len(self.preguntas_realizadas)}/{self.num_preguntas}") if not self.smode.flag_smode else self.frame_manager.study_question_id_label.config(text=f"Respondidas: {len(self.preguntas_realizadas)}/{self.num_preguntas}")
+
         opciones = pregunta["options"][0]
         
         self.display_image(pregunta)
@@ -166,3 +172,4 @@ class Question_file:
                     self.num_preguntas = self.num_preguntas_per_test[i-1]
                     # print(f"Num preguntas para test {self.qfile.test_names[i]}: {self.qfile.num_preguntas}")
                     break
+        self.frame_manager.number_of_questions_label.config(text=f"Total questions: {self.num_preguntas}")
