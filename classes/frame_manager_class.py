@@ -231,6 +231,8 @@ class FrameManager:
         self.study_percentage_incorrect_label.pack(side="left", padx=10)
         self.study_question_id_label = tk.Label(study_percentage_frame, text=f"Respondidas: {len(self.qfile.preguntas_realizadas)}/{self.qfile.num_preguntas}")
         self.study_question_id_label.pack(side="left", padx=10)
+        self.study_retrieve_info_check = tk.Checkbutton(study_percentage_frame, text="Retrieve Results", command=lambda:self.smode.turn_results_flag(), onvalue=True, offvalue=False)
+        self.study_retrieve_info_check.pack(side="left", padx=10)
 
         self.show_frame("study_frame")
     

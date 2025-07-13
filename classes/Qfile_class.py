@@ -7,18 +7,15 @@ from random import choice
 from PIL import Image, ImageTk
 
 
-def load_data(root_fichero_preguntas):
-        with open(os.path.join(root_fichero_preguntas), "r",encoding="utf-8") as f:
-            return json.load(f)
-
 class Question_file:
-    def __init__(self, init, questionaire, shuffle, smode, frame_manager, prev_test):
+    def __init__(self, init, questionaire, shuffle, smode, frame_manager, prev_test, e2json):
         self.init = init
         self.questionaire = questionaire
         self.shuffle = shuffle
         self.smode = smode
         self.frame_manager = frame_manager
         self.prev_test = prev_test
+        self.excel_to_json = e2json
 
         
         self.root_fichero_preguntas = None      # Nombre del fichero de preguntas
@@ -46,11 +43,10 @@ class Question_file:
     def load_question_file(self):
         self.root_fichero_preguntas = filedialog.askopenfilename(initialdir=os.path.join(self.init.root_path), 
                                                   title="Seleccionar fichero de preguntas",
-                                                  filetypes=(("Archivos de texto", "*.json"),))   
+                                                  filetypes=(("Archivos de texto", "*.json"),("Excel files", "*.xlsx")))   
                                              
         self.nombre_fichero_preguntas = os.path.basename(self.root_fichero_preguntas)
-
-        self.data = load_data(self.root_fichero_preguntas)      
+        self.data = self.load_data()      
         self.num_preguntas_totales = len(self.data['emp_details'])
         self.num_opciones_preguntas = len(self.data['emp_details'][0]['options'][0])
         self.frame_manager.question_file_path.config(text=self.nombre_fichero_preguntas)      
@@ -173,3 +169,12 @@ class Question_file:
                     # print(f"Num preguntas para test {self.qfile.test_names[i]}: {self.qfile.num_preguntas}")
                     break
         self.frame_manager.number_of_questions_label.config(text=f"Total questions: {self.num_preguntas}")
+
+    def load_data(self):
+        if self.root_fichero_preguntas.endswith('.xlsx'):
+            self.excel_to_json.excel_url = self.root_fichero_preguntas
+            fichero_json = self.excel_to_json.generate_json()
+            return fichero_json
+        else:
+            with open(os.path.join(self.root_fichero_preguntas), "r",encoding="utf-8") as f:
+                return json.load(f)

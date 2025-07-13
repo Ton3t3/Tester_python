@@ -9,10 +9,11 @@ import time
 
 
 class SMode:
-    def __init__(self, qfile, frame_manager, root):
+    def __init__(self, qfile, questionaire, frame_manager, root):
         self.qfile = qfile
         self.root = root
         self.frame_manager = frame_manager
+        self.questionaire = questionaire
         
         self.flag_smode = False
         self.flag_last_question = True
@@ -24,11 +25,14 @@ class SMode:
         self.incorrect_percentage = 0
         self.correct_questions = 0
         self.incorrect_questions = 0
+        self.smode_retrieve_results = False
         
     
     def turn_sflag(self):
         self.flag_smode = not self.flag_smode
 
+    def turn_results_flag(self):
+        self.smode_retrieve_results = not self.smode_retrieve_results
     # def study_mode_activation(self):
 
     #     self.widget.clean_button.pack_forget()
@@ -83,6 +87,9 @@ class SMode:
             else:
                 self.blink(self.frame_manager.study_options_buttons[self.letra_a_num(respuesta)], "#C70039")
                 self.incorrect_questions += 1
+
+            self.questionaire.results_manager(respuesta, pregunta)
+
             self.qfile.preguntas_realizadas.append(self.qfile.current_question)
             self.correct_percentage = (self.correct_questions / len(self.qfile.preguntas_realizadas)) * 100
             self.incorrect_percentage = (self.incorrect_questions / len(self.qfile.preguntas_realizadas)) * 100
@@ -137,8 +144,11 @@ class SMode:
 
         
     def smode_end_test(self):
-        messagebox.showinfo("Finalizado", f"El test ha terminado")
-        self.root.quit()
+        if self.smode_retrieve_results:
+            self.questionaire.end_test()
+        else:
+            messagebox.showinfo("Finalizado", f"El test ha terminado")
+            self.root.quit()
 
     def blink(self, button, color_id):
         if self.blinked:

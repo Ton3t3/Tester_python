@@ -9,6 +9,7 @@ import sys
 from classes.questionaire_class import Questionaire
 from classes.shuffle_class import Shuffle
 from classes.Qfile_class import Question_file
+from classes.excel_to_json_class import ExccelToJson
 from classes.previous_test_class import PreviousTest
 from classes.study_mode_class import SMode
 from classes.frame_manager_class import FrameManager
@@ -36,10 +37,11 @@ if __name__ == "__main__":
 
     initializer = Init(root)
     shuffle = Shuffle()
-    question_file = Question_file(initializer, None, shuffle, None, None, None)
+    excel_to_json = ExccelToJson()
+    question_file = Question_file(initializer, None, shuffle, None, None, None, excel_to_json)
     questionaire = Questionaire(question_file, shuffle, None, initializer, root, None)
     question_file.questionaire = questionaire
-    study_mode = SMode(question_file, None, root)
+    study_mode = SMode(question_file, questionaire, None, root)
     # widget = Widget(root, questionaire, question_file, shuffle, initializer, study_mode, None)
     # study_mode.widget = widget
     question_file.smode = study_mode
